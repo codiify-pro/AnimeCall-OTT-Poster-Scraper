@@ -1,27 +1,19 @@
-from fastapi import Header, HTTPException, status
+from fastapi import Query, HTTPException, status
 
 API_TOKEN = "okworld"
 
 
-def verify_token(authorization: str = Header(None)):
-    if not authorization:
+def verify_token(key: str = Query(None)):
+    if not key:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header missing"
+            detail="API key missing"
         )
 
-    try:
-        scheme, token = authorization.split()
-    except ValueError:
+    if key != API_TOKEN:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authorization format"
-        )
-
-    if scheme.lower() != "bearer" or token != API_TOKEN:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or missing token"
+            detail="Invalid API key"
         )
 
     return True
