@@ -1,7 +1,7 @@
-from fastapi import Header, HTTPException, status, Depends
-import os
+from fastapi import Header, HTTPException, status
 
-API_TOKEN = os.getenv("API_TOKEN")
+API_TOKEN = "okworld"
+
 
 def verify_token(authorization: str = Header(None)):
     if not authorization:
@@ -23,3 +23,5 @@ def verify_token(authorization: str = Header(None)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or missing token"
         )
+
+    return True
